@@ -16,4 +16,4 @@ $ yarn add rn-animated-sprite-matrix
 ```
 
 ### Example Use
-<img src="https://raw.githubusercontent.com/micahrye/rn-animated-sprite-matrix/master/monsterMatrix.gif" width="356" height="302">
+<img src="https://raw.githubusercontent.com/micahrye/rn-animated-sprite-matrix/master/example/app/monsterMatrix.gif" width="356" height="302">
