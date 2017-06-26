@@ -23,19 +23,28 @@ class AnimatedSpriteMatrix extends React.Component {
   }
 
   spriteSize (sprite, scale) {
-    const scaleBy = scale * this.props.scale.image;
-    return _.mapValues(sprite.size, (val) => val * scaleBy);
+    // for old sprites size was an object, for new sprites it is a function
+    let size = sprite.size; 
+    if (_.isFunction(sprite.size)) {
+      size = sprite.size(scale);
+    }
+    return _.mapValues(size, (val) => val * scale);
   }
 
   cellLocation (position, sprite, scale) {
-    console.log(`cellLocation pos ${position}`)
     const row = Math.floor(position / this.props.dimensions.columns);
     const column = position % this.props.dimensions.columns;
-    
+    let bottomMargin = 0;
+    if (row > 0) {
+      bottomMargin = this.props.cellBottomMargin;
+    }
+    rightMargin = 0;
+    if (column > 0) {
+      rightMargin = this.props.cellRightMargin;
+    }
     const spriteSize = this.spriteSize(sprite, scale);
-    const top = row * spriteSize.height;
-    const left = column * spriteSize.width;
-    console.log(`cellLocation {${top}, ${left}}`)
+    const top = row * spriteSize.height + bottomMargin;
+    const left = column * spriteSize.width + rightMargin;
     return {top, left};
   }
 
@@ -61,6 +70,7 @@ class AnimatedSpriteMatrix extends React.Component {
         return null;
       }
       return (
+
         <AnimatedSprite
           sprite={cell.sprite}
           ref={`cell${index}`}
@@ -73,7 +83,8 @@ class AnimatedSpriteMatrix extends React.Component {
           onPress={() => this.cellPress(cell, index)}
           onPressIn={() => this.cellPressIn(cell, index)}
           onPressOut={() => this.cellPressOut(cell, index)}
-        />
+        />  
+
       );
     });
         
@@ -96,15 +107,23 @@ AnimatedSpriteMatrix.propTypes = {
       active: PropTypes.bool.isRequired,
     }
   )).isRequired,
-  scale: PropTypes.object.isRequired,
+  // scale: PropTypes.object.isRequired,
   
   styles: PropTypes.object,
   cellSpriteScale: PropTypes.number,
   onPress: PropTypes.func,
   onPressIn: PropTypes.func,
   onPressOut: PropTypes.func,
+  cellRightMargin: PropTypes.number,
+  cellBottomMargin: PropTypes.number,
+};
+
+AnimatedSpriteMatrix.defaultProps = {
+  cellRightMargin: 10,
+  cellBottomMargin: 10,
 };
 
 reactMixin.onClass(AnimatedSpriteMatrix, TimerMixin);
 
 export default AnimatedSpriteMatrix;
+
