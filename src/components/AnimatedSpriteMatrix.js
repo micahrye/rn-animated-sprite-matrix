@@ -28,7 +28,7 @@ class AnimatedSpriteMatrix extends React.Component {
     if (_.isFunction(sprite.size)) {
       size = sprite.size(scale);
     }
-    return _.mapValues(size, (val) => val * scale);
+    return size;
   }
 
   cellLocation (position, sprite, scale) {
@@ -126,4 +126,3 @@ AnimatedSpriteMatrix.defaultProps = {
 reactMixin.onClass(AnimatedSpriteMatrix, TimerMixin);
 
 export default AnimatedSpriteMatrix;
-
